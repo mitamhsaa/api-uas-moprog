@@ -23,7 +23,7 @@ if (
     && !empty($nama_tugas) && !empty($matkul) && !empty($deskripsi) && !empty($deadline) && !empty($status)
 ) {
     // Query update
-    $sql = "UPDATE users SET 
+    $sql = "UPDATE tugas SET 
                 user_id = ?, 
                 kode_matkul = ?,
                 kelompok = ?,

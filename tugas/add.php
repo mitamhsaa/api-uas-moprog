@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit;
     }
 
-    $sql = "INSERT INTO jadwal_kuliah (user_id,kode_matkul,kelompok,nama_tugas,matkul,deskripsi,deadline,status) VALUES ($udser_id,$kode_matkul,$nama_matkul,$kelompok,$hari,$jam_mulai,$jam_selesai,$ruangan)";
+    $sql = "INSERT INTO tugas (user_id,kode_matkul,kelompok,nama_tugas,matkul,deskripsi,deadline,status) VALUES ($udser_id,$kode_matkul,$nama_matkul,$kelompok,$hari,$jam_mulai,$jam_selesai,$ruangan)";
 
     if (mysqli_query($conn, $sql)) {
         $response['status'] = true;

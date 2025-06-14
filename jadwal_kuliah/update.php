@@ -22,8 +22,8 @@ if (
     !empty($id) && !empty($user_id) && !empty($kode_matkul) && !empty($nama_matkul) &&
     !empty($kelompok) && !empty($hari) && !empty($jam_mulai) && !empty($jam_selesai) && !empty($ruangan)
 ) {
-    // Query update
-    $sql = "UPDATE users SET 
+    // ✅ Ganti nama tabel dari 'users' ke tabel sebenarnya
+    $sql = "UPDATE jadwal_kuliah SET 
                 user_id = ?, 
                 kode_matkul = ?, 
                 nama_matkul = ?, 
@@ -33,10 +33,11 @@ if (
                 jam_selesai = ?, 
                 ruangan = ?
             WHERE id = ?";
+
     $stmt = $conn->prepare($sql);
 
     if ($stmt) {
-        // Bind parameter: i s s s s s s s i (total 9 parameter)
+        // ✅ Sesuaikan tipe data (misal: i = integer, s = string)
         $stmt->bind_param(
             "isssssssi",
             $user_id,
@@ -54,27 +55,27 @@ if (
         if ($stmt->execute()) {
             $response = [
                 'status' => true,
-                'data' => '',
+                'data' => null,
                 'message' => 'Data berhasil diperbarui',
             ];
         } else {
             $response = [
                 'status' => false,
-                'data' => '',
-                'message' => 'Gagal mengeksekusi query',
+                'data' => null,
+                'message' => 'Gagal mengeksekusi query: ' . $stmt->error,
             ];
         }
     } else {
         $response = [
             'status' => false,
-            'data' => '',
-            'message' => 'Gagal mempersiapkan statement',
+            'data' => null,
+            'message' => 'Gagal mempersiapkan statement: ' . $conn->error,
         ];
     }
 } else {
     $response = [
         'status' => false,
-        'data' => '',
+        'data' => null,
         'message' => 'Data tidak lengkap',
     ];
 }
