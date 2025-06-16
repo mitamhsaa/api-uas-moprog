@@ -1,0 +1,20 @@
+[15-Jun-2025 00:44:19 Asia/Jakarta] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/aftx9255/public_html/api-moprog/conn.php on line 16
+[15-Jun-2025 00:55:09 Asia/Jakarta] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/aftx9255/public_html/api-moprog/conn.php on line 16
+[15-Jun-2025 00:55:10 Asia/Jakarta] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/aftx9255/public_html/api-moprog/conn.php on line 16
+[15-Jun-2025 00:55:11 Asia/Jakarta] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/aftx9255/public_html/api-moprog/conn.php on line 16
+[15-Jun-2025 00:55:11 Asia/Jakarta] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/aftx9255/public_html/api-moprog/conn.php on line 16
+[15-Jun-2025 00:55:11 Asia/Jakarta] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/aftx9255/public_html/api-moprog/conn.php on line 16
+[15-Jun-2025 00:55:12 Asia/Jakarta] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/aftx9255/public_html/api-moprog/conn.php on line 16
+[15-Jun-2025 00:55:12 Asia/Jakarta] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/aftx9255/public_html/api-moprog/conn.php on line 16
+[16-Jun-2025 21:43:23 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Call to a member function bind_param() on bool in /home/aftx9255/public_html/api-moprog.aftlah.my.id/jadwal_kuliah/detail.php:31
+Stack trace:
+#0 {main}
+  thrown in /home/aftx9255/public_html/api-moprog.aftlah.my.id/jadwal_kuliah/detail.php on line 31
+[16-Jun-2025 21:43:52 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Call to a member function bind_param() on bool in /home/aftx9255/public_html/api-moprog.aftlah.my.id/jadwal_kuliah/detail.php:31
+Stack trace:
+#0 {main}
+  thrown in /home/aftx9255/public_html/api-moprog.aftlah.my.id/jadwal_kuliah/detail.php on line 31
+[16-Jun-2025 21:44:21 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Call to a member function bind_param() on bool in /home/aftx9255/public_html/api-moprog.aftlah.my.id/jadwal_kuliah/detail.php:31
+Stack trace:
+#0 {main}
+  thrown in /home/aftx9255/public_html/api-moprog.aftlah.my.id/jadwal_kuliah/detail.php on line 31

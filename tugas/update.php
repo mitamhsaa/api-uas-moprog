@@ -6,78 +6,75 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 include "../conn.php";
 
-// Ambil data dari POST
-$id = $_POST['id'];
-$user_id = $_POST['user_id'];
-$kode_matkul = $_POST['kode_matkul'];
-$kelompok = $_POST['kelompok'];
-$nama_tugas = $_POST['nama_tugas'];
-$matkul = $_POST['matkul'];
-$deskripsi = $_POST['deskripsi'];
-$deadline = $_POST['deadline'];
-$status = $_POST['status'];
+$data = json_decode(file_get_contents("php://input"), true);
+$id = $data['id'] ?? null;
+$user_id = $data['user_id'] ?? null;
 
-// Validasi semua data tidak kosong
-if (
-    !empty($id) && !empty($user_id) && !empty($kode_matkul) && !empty($kelompok) 
-    && !empty($nama_tugas) && !empty($matkul) && !empty($deskripsi) && !empty($deadline) && !empty($status)
-) {
-    // Query update
-    $sql = "UPDATE tugas SET 
-                user_id = ?, 
-                kode_matkul = ?,
-                kelompok = ?,
-                nama_tugas = ?,  
-                matkul = ?, 
-                deskripsi = ?, 
-                deadline = ?, 
-                status = ?
-            WHERE id = ?";
-    $stmt = $conn->prepare($sql);
+$response = [
+    'status' => false,
+    'data' => null,
+    'message' => '',
+];
 
-    if ($stmt) {
-        // Bind parameter: i s s s s s s s i (total 9 parameter)
-        $stmt->bind_param(
-            "isssssssi",
-            $user_id,
-            $kode_matkul,
-            $kelompok,
-            $nama_tugas,
-            $matkul,
-            $deskripsi,
-            $deadline,
-            $status,
-            $id
-        );
+if (!$id || !$user_id) {
+    $response['message'] = 'ID dan user_id wajib diisi';
+    echo json_encode($response, JSON_PRETTY_PRINT);
+    exit;
+}
 
-        // Eksekusi statement
-        if ($stmt->execute()) {
-            $response = [
-                'status' => true,
-                'data' => '',
-                'message' => 'Data berhasil diperbarui',
-            ];
-        } else {
-            $response = [
-                'status' => false,
-                'data' => '',
-                'message' => 'Gagal mengeksekusi query',
-            ];
-        }
-    } else {
-        $response = [
-            'status' => false,
-            'data' => '',
-            'message' => 'Gagal mempersiapkan statement',
-        ];
-    }
+$query = "SELECT * FROM tugas WHERE id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
+$existing = $result->fetch_assoc();
+
+if (!$existing) {
+    $response['message'] = 'Data tidak ditemukan';
+    echo json_encode($response, JSON_PRETTY_PRINT);
+    exit;
+}
+
+
+$kode_matkul = $data['kode_matkul'] ?? $existing['kode_matkul'];
+$kelompok = $data['kelompok'] ?? $existing['kelompok'];
+$nama_tugas = $data['nama_tugas'] ?? $existing['nama_tugas'];
+$matkul = $data['matkul'] ?? $existing['matkul'];
+$deskripsi = array_key_exists('deskripsi', $data) ? $data['deskripsi'] : $existing['deskripsi']; // Bisa null
+$deadline = $data['deadline'] ?? $existing['deadline'];
+$status = $data['status'] ?? $existing['status'];
+
+
+$updateQuery = "UPDATE tugas SET 
+    user_id = ?, 
+    kode_matkul = ?, 
+    kelompok = ?, 
+    nama_tugas = ?, 
+    matkul = ?, 
+    deskripsi = ?, 
+    deadline = ?, 
+    status = ? 
+    WHERE id = ?";
+
+$updateStmt = $conn->prepare($updateQuery);
+$updateStmt->bind_param(
+    "isssssssi",
+    $user_id,
+    $kode_matkul,
+    $kelompok,
+    $nama_tugas,
+    $matkul,
+    $deskripsi,
+    $deadline,
+    $status,
+    $id
+);
+
+if ($updateStmt->execute()) {
+    $response['status'] = true;
+    $response['message'] = 'Data berhasil diperbarui';
 } else {
-    $response = [
-        'status' => false,
-        'data' => '',
-        'message' => 'Data tidak lengkap',
-    ];
+    $response['message'] = 'Gagal memperbarui data';
 }
 
 echo json_encode($response, JSON_PRETTY_PRINT);
-?>

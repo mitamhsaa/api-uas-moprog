@@ -1,8 +1,9 @@
 <?php
+header('Content-Type: application/json');
 require '../conn.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
-$username = $data['username'] ?? '';
+$email = $data['email'] ?? '';
 $password = $data['password'] ?? '';
 
 $response = [
@@ -11,9 +12,18 @@ $response = [
     'message' => '',
 ];
 
-$stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
-$stmt->execute([$username]);
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
+if (empty($email) || empty($password)) {
+    http_response_code(400);
+    $response['message'] = 'Email dan password wajib diisi';
+    echo json_encode($response);
+    exit;
+}
+
+$stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
 
 if ($user && password_verify($password, $user['password'])) {
     unset($user['password']);
@@ -22,8 +32,7 @@ if ($user && password_verify($password, $user['password'])) {
     $response['message'] = 'Login berhasil';
 } else {
     http_response_code(401);
-    $response['message'] = 'Username atau password salah';
+    $response['message'] = 'Email atau password salah';
 }
 
 echo json_encode($response);
-?>

@@ -1,10 +1,10 @@
 <?php
+header('Content-Type: application/json');
+
 $response = [
-    'status' => false,
+    'status' => true,
     'data' => null,
-    'message' => '',
+    'message' => 'Logout berhasil',
 ];
-$response['message'] = 'Logout berhasil';
-$response['status'] = true;
+
 echo json_encode($response);
-?>

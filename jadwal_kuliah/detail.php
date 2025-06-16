@@ -6,34 +6,55 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 include "../conn.php";
 
-if (!isset($_GET['id'])){
-    $response = [
+$response = [
     'status' => false,
-    'data' => '',
+    'data' => [],
     'message' => '',
-    ];
+];
+
+
+if (!isset($_GET['user_id'])) {
+    http_response_code(400);
+    $response['message'] = 'Parameter user_id tidak ditemukan';
+    echo json_encode($response);
+    exit;
 }
-else{
-    $id = $_GET['id'];
-    $sql = "SELECT * FROM jadwal_kuliah WHERE id = ?";
-    $stmt = $conn->prepare ($sql);
-    $stmt->bind_param("i", $id);
+
+$user_id = $_GET['user_id'];
+$hari = $_GET['hari'] ?? null;
+
+try {
+    if ($hari) {
+        
+        $sql = "SELECT * FROM jadwal_kuliah WHERE user_id = ? AND hari = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("is", $user_id, $hari);
+    } else {
+        
+        $sql = "SELECT * FROM jadwal_kuliah WHERE user_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $user_id);
+    }
+
     $stmt->execute();
     $result = $stmt->get_result();
-    if($result->num_rows>0){
-        $response = [
-        'status' => true,
-        'data' => $result->fetch_assoc(),
-        'message' => 'Berhasil',
-    ];
+
+    if ($result->num_rows > 0) {
+        $data = [];
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+        $response['status'] = true;
+        $response['data'] = $data;
+        $response['message'] = 'Berhasil mengambil data jadwal kuliah';
+    } else {
+        $response['message'] = 'Tidak ada data jadwal kuliah';
     }
-    else{
-        $response = [
-        'status' => false,
-        'data' => '',
-        'message' => 'Tidak',
-    ];
-    } 
+
+    $stmt->close();
+} catch (Exception $e) {
+    http_response_code(500);
+    $response['message'] = 'Terjadi kesalahan: ' . $e->getMessage();
 }
-echo json_encode($response);
-?>
+
+echo json_encode($response, JSON_PRETTY_PRINT);
