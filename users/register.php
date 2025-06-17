@@ -16,7 +16,6 @@ $response = [
     'message' => '',
 ];
 
-// Validasi input
 if (empty($username) || empty($email) || empty($password) || empty($universitas) || empty($jurusan)) {
     http_response_code(400);
     $response['message'] = 'Semua field wajib diisi';
@@ -24,7 +23,6 @@ if (empty($username) || empty($email) || empty($password) || empty($universitas)
     exit;
 }
 
-// Cek apakah username atau email sudah ada
 $check = $conn->prepare("SELECT id FROM users WHERE username = ? OR email = ?");
 $check->bind_param("ss", $username, $email);
 $check->execute();
