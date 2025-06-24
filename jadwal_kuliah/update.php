@@ -1,28 +1,30 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
 
 include "../conn.php";
 
-// Ambil data dari POST
-$id = $_POST['id'];
-$user_id = $_POST['user_id'];
-$kode_matkul = $_POST['kode_matkul'];
-$nama_matkul = $_POST['nama_matkul'];
-$kelompok = $_POST['kelompok'];
-$hari = $_POST['hari'];
-$jam_mulai = $_POST['jam_mulai'];
-$jam_selesai = $_POST['jam_selesai'];
-$ruangan = $_POST['ruangan'];
 
-// Validasi semua data tidak kosong
+$input = json_decode(file_get_contents("php://input"), true);
+
+$id           = isset($input['id']) ? trim($input['id']) : '';
+$user_id      = isset($input['user_id']) ? trim($input['user_id']) : '';
+$kode_matkul  = isset($input['kode_matkul']) ? trim($input['kode_matkul']) : '';
+$nama_matkul  = isset($input['nama_matkul']) ? trim($input['nama_matkul']) : '';
+$kelompok     = isset($input['kelompok']) ? trim($input['kelompok']) : '';
+$hari         = isset($input['hari']) ? trim($input['hari']) : '';
+$jam_mulai    = isset($input['jam_mulai']) ? trim($input['jam_mulai']) : '';
+$jam_selesai  = isset($input['jam_selesai']) ? trim($input['jam_selesai']) : '';
+$ruangan      = isset($input['ruangan']) ? trim($input['ruangan']) : '';
+
+
 if (
-    !empty($id) && !empty($user_id) && !empty($kode_matkul) && !empty($nama_matkul) &&
-    !empty($kelompok) && !empty($hari) && !empty($jam_mulai) && !empty($jam_selesai) && !empty($ruangan)
+    $id && $user_id && $kode_matkul && $nama_matkul &&
+    $kelompok && $hari && $jam_mulai && $jam_selesai && $ruangan
 ) {
-    // ✅ Ganti nama tabel dari 'users' ke tabel sebenarnya
     $sql = "UPDATE jadwal_kuliah SET 
                 user_id = ?, 
                 kode_matkul = ?, 
@@ -37,7 +39,6 @@ if (
     $stmt = $conn->prepare($sql);
 
     if ($stmt) {
-        // ✅ Sesuaikan tipe data (misal: i = integer, s = string)
         $stmt->bind_param(
             "isssssssi",
             $user_id,
@@ -51,7 +52,6 @@ if (
             $id
         );
 
-        // Eksekusi statement
         if ($stmt->execute()) {
             $response = [
                 'status' => true,
@@ -65,11 +65,13 @@ if (
                 'message' => 'Gagal mengeksekusi query: ' . $stmt->error,
             ];
         }
+
+        $stmt->close();
     } else {
         $response = [
             'status' => false,
             'data' => null,
-            'message' => 'Gagal mempersiapkan statement: ' . $conn->error,
+            'message' => 'Gagal mempersiapkan query: ' . $conn->error,
         ];
     }
 } else {
