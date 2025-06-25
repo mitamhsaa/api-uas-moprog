@@ -8,8 +8,8 @@ include "../conn.php";
 
 $response = [
     'status' => false,
-    'message' => 'Permintaan tidak valid',
     'data' => null,
+    'message' => '',
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
