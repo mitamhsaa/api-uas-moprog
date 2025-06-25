@@ -5,7 +5,11 @@ header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 include "../conn.php";
 
-$response = ['status' => false, 'data' => [], 'message' => '',];
+$response = [
+    'status' => false,
+    'data' => [],
+    'message' => '',
+];
 
 if (!isset($_GET['user_id'])) {
     http_response_code(400);

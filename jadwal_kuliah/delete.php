@@ -1,4 +1,4 @@
-<?php 
+<?php
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
@@ -6,35 +6,35 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 include "../conn.php";
 
 
-if(isset($_GET['id'])){
+if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
-    if(!empty($id)){
+    if (!empty($id)) {
         $sql = "DELETE FROM jadwal_kuliah WHERE id = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i",$id);
+        $stmt->bind_param("i", $id);
 
-        if($stmt->execute()){
+        if ($stmt->execute()) {
             $response = [
                 'status' => true,
                 'data' => '',
                 'message' => 'Data Berhasil Dihapus',
             ];
-        } else{
+        } else {
             $response = [
                 'status' => false,
                 'data' => '',
                 'message' => 'Gagal Menghapus Data',
-             ];
-        } 
-
-    } else{
-            $response = [
-                'status' => false,
-                'data' => '',
-                'message' => 'Tidak ada id dipilih',
             ];
-        } 
+        }
+
+    } else {
+        $response = [
+            'status' => false,
+            'data' => '',
+            'message' => 'Tidak ada id dipilih',
+        ];
     }
-    echo json_encode($response, JSON_PRETTY_PRINT);
+}
+echo json_encode($response, JSON_PRETTY_PRINT);
 ?>
