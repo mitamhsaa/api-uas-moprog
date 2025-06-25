@@ -21,13 +21,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $hari         = $_POST['hari'] ?? '';
     $jam_mulai    = $_POST['jam_mulai'] ?? '';
     $jam_selesai  = $_POST['jam_selesai'] ?? '';
-    $ruangan      = $_POST['ruangan'] ?? '';
+    $sks          = $_POST['sks'] ?? '';
 
 
     if (
         empty($user_id) || empty($kode_matkul) || empty($nama_matkul) ||
         empty($kelompok) || empty($hari) || empty($jam_mulai) ||
-        empty($jam_selesai) || empty($ruangan)
+        empty($jam_selesai) || empty($ruangan) || empty($sks)
     ) {
         $response['message'] = 'Semua field wajib diisi';
         echo json_encode($response, JSON_PRETTY_PRINT);
@@ -36,14 +36,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     
     $sql = "INSERT INTO jadwal_kuliah (
-        user_id, kode_matkul, nama_matkul, kelompok, hari, jam_mulai, jam_selesai, ruangan
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        user_id, kode_matkul, nama_matkul, kelompok, hari, jam_mulai, jam_selesai, ruangan, sks
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = $conn->prepare($sql);
 
     if ($stmt) {
         $stmt->bind_param(
-            "isssssss",
+            "isssssssi",
             $user_id,
             $kode_matkul,
             $nama_matkul,
@@ -51,7 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $hari,
             $jam_mulai,
             $jam_selesai,
-            $ruangan
+            $ruangan,
+            $sks
         );
 
         if ($stmt->execute()) {
@@ -65,7 +66,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'hari'          => $hari,
                 'jam_mulai'     => $jam_mulai,
                 'jam_selesai'   => $jam_selesai,
-                'ruangan'       => $ruangan
+                'ruangan'       => $ruangan,
+                'sks'           => $sks
             ];
         } else {
             $response['message'] = 'Gagal menambahkan data: ' . $stmt->error;

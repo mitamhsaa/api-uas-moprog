@@ -19,11 +19,11 @@ $hari         = isset($input['hari']) ? trim($input['hari']) : '';
 $jam_mulai    = isset($input['jam_mulai']) ? trim($input['jam_mulai']) : '';
 $jam_selesai  = isset($input['jam_selesai']) ? trim($input['jam_selesai']) : '';
 $ruangan      = isset($input['ruangan']) ? trim($input['ruangan']) : '';
-
+$sks          = isset($input['sks']) ? trim($input['sks']): '';
 
 if (
     $id && $user_id && $kode_matkul && $nama_matkul &&
-    $kelompok && $hari && $jam_mulai && $jam_selesai && $ruangan
+    $kelompok && $hari && $jam_mulai && $jam_selesai && $ruangan && $sks
 ) {
     $sql = "UPDATE jadwal_kuliah SET 
                 user_id = ?, 
@@ -34,13 +34,14 @@ if (
                 jam_mulai = ?, 
                 jam_selesai = ?, 
                 ruangan = ?
+                $sks = ?
             WHERE id = ?";
 
     $stmt = $conn->prepare($sql);
 
     if ($stmt) {
         $stmt->bind_param(
-            "isssssssi",
+            "isssssssii",
             $user_id,
             $kode_matkul,
             $nama_matkul,
@@ -49,6 +50,7 @@ if (
             $jam_mulai,
             $jam_selesai,
             $ruangan,
+            $sks,
             $id
         );
 

@@ -6,11 +6,6 @@
 // $password = "";
 // $dbname = "unitime";
 
-// production dias
-// $severname = "localhost";
-// $username = "masjid29_altaf";
-// $password = "altafunitimemoprog";
-// $dbname = "masjid29_unitime";
 
 // production altaf
 $severname = "localhost";
